@@ -18,7 +18,7 @@ port: 7890
 socks-port: 7891
 redir-port: 7892
 mixed-port: 7893
-tproxy-port: 7895
+tproxy-port: 9898
 unified-delay: false
 tcp-concurrent: true
 external-controller: 0.0.0.0:9090
@@ -28,6 +28,10 @@ external-ui: "./ui"
 
 # 为 Linux 下的出站连接提供默认流量标记
 routing-mark: 2233
+
+iptables:
+  enable: true # default is false
+  inbound-interface: eth0 # detect the inbound interface, default is 'lo'
 
 geodata-mode: true
 geox-url:
@@ -81,9 +85,9 @@ dns:
 proxies:
   - name: "🇸🇬 [vless-reality-vision] 新家坡-me"
     type: vless
-    server: 13.229.96.4
-    port: 59181
-    uuid: dea3aec8-c71e-4333-c0fe-98409885f591
+    server: host
+    port: port
+    uuid: uuid
     network: tcp
     tls: true
     udp: true
