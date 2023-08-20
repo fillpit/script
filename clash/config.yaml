@@ -1,0 +1,179 @@
+#---------------------------------------------------#
+## 配置文件需要放置在 $HOME/.config/clash.meta/*.yaml
+
+## 这份文件是clashX的基础配置文件，请尽量新建配置文件进行修改。
+
+## 如果您不知道如何操作，请参阅
+## Clash Meta wiki  https://docs.metacubex.one
+## Clash Meta wiki  https://clash-meta.wiki
+## Clash Meta Github文档  https://github.com/MetaCubeX/Clash.Meta/blob/Alpha/README.md
+
+#---------------------------------------------------#
+
+mode: rule
+ipv6: true
+log-level: info
+allow-lan: true
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7895
+unified-delay: false
+tcp-concurrent: true
+external-controller: 0.0.0.0:9090
+secret: '123456'
+bind-address: "*"
+external-ui: "./ui"
+
+# 为 Linux 下的出站连接提供默认流量标记
+routing-mark: 2233
+
+geodata-mode: true
+geox-url:
+  geoip: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
+  geosite: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
+  mmdb: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
+
+find-process-mode: strict
+global-client-fingerprint: chrome
+
+profile:
+  store-selected: true
+  store-fake-ip: true
+
+sniffer:
+  enable: true
+  sniff:
+    TLS:
+      ports: [443, 8443]
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+
+tun:
+  enable: true
+  stack: gvisor
+  dns-hijack:
+    - 'any:53'
+  auto-route: true
+  auto-detect-interface: true
+
+dns:
+  enable: true
+  listen: :1053
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 28.0.0.1/8
+  fake-ip-filter:
+    - '*'
+    - '+.lan'
+    - '+.local'
+  nameserver:
+    - https://doh.pub/dns-query
+  proxy-server-nameserver:
+    - https://dns.nextdns.io/5a8546
+  nameserver-policy:
+    "geosite:cn,private":
+      - https://doh.pub/dns-query
+      - https://dns.alidns.com/dns-query
+
+proxies:
+  - name: "🇸🇬 [vless-reality-vision] 新家坡-me"
+    type: vless
+    server: 13.229.96.4
+    port: 59181
+    uuid: dea3aec8-c71e-4333-c0fe-98409885f591
+    network: tcp
+    tls: true
+    udp: true
+    flow: xtls-rprx-vision
+    servername: addons.mozilla.org
+    reality-opts:
+      public-key: "qhTzYYIgBzDLNYR79oxftqdo1kzL-1_hGJKfqrOliCY"
+      short-id: 9ab288f7
+    client-fingerprint: chrome
+
+proxy-groups:
+  - name: "🚀 节点选择"
+    type: select
+    proxies:
+      - "♻️ 自动选择"
+      - "🇸🇬 [vless-reality-vision] 新家坡-me"
+      - DIRECT
+  - name: "♻️ 自动选择"
+    type: url-test
+    url: http://cp.cloudflare.com/generate_204
+    interval: '180'
+    tolerance: '100'
+    proxies:
+      - "🇸🇬 [vless-reality-vision] 新家坡-me"
+  - name: Ⓜ️ 微软服务
+    type: select
+    proxies:
+      - DIRECT
+      - "🇸🇬 [vless-reality-vision] 新家坡-me"
+  - name: "🍎 苹果服务"
+    type: select
+    proxies:
+      - DIRECT
+      - "🇸🇬 [vless-reality-vision] 新家坡-me"
+      - "🚀 节点选择"
+  - name: "📺 哔哩东南亚"
+    type: select
+    proxies:
+      - DIRECT
+      - "🇸🇬 [vless-reality-vision] 新家坡-me"
+      - "🚀 节点选择"
+  - name: "🐟 漏网之鱼"
+    type: select
+    proxies:
+      - "♻️ 自动选择"
+      - "🇸🇬 [vless-reality-vision] 新家坡-me"
+      - DIRECT
+rule-providers:
+  reject:
+    type: http
+    behavior: domain
+    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
+    path: ./ruleset/reject.yaml
+    interval: 86400
+rules:
+  # 自己的规则放
+  - DOMAIN-SUFFIX,fillpit.top,DIRECT
+  - DOMAIN-SUFFIX,pingan.com.cn,♻️ 自动选择
+  - DOMAIN,clash.razord.top,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+
+  # 常用局域网 ip 段 直连
+  - GEOIP,LAN,DIRECT
+
+  # ******** 自定义 规则区域 start ********
+  # ****** 默认 非国内的域名和ip都走代理 ******
+  # ****** 也就是说分流规则这里主要关注 需要直连的地址 和需要屏蔽的地址 (没匹配上的都走代理) ******
+
+  # 广告域名 屏蔽
+  - RULE-SET,reject,REJECT
+  # 测速网站 直连
+  - GEOSITE,speedtest,DIRECT
+    # 私有网络专用域名
+  - GEOSITE,private,DIRECT
+    # 哔哩哔哩 直连
+  - GEOSITE,bilibili,DIRECT
+  # 微软家的服务 走代理
+  - GEOSITE,microsoft,Ⓜ️ 微软服务
+  # apple 的服务
+  - "GEOSITE,apple,🍎 苹果服务"
+  # telegram
+  - GEOSITE,telegram,♻️ 自动选择
+  # 娱乐类
+  - GEOSITE,category-entertainment,♻️ 自动选择
+
+  # ******** 自定义 规则区域 end ********
+
+  # 国内域名 直连
+  - GEOSITE,CN,DIRECT
+  # 国内 ip 直连
+  - GEOIP,CN,DIRECT
+  # 没匹配上的
+  - MATCH,🐟 漏网之鱼
