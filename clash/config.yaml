@@ -10,84 +10,115 @@
 
 #---------------------------------------------------#
 
+# port: 7890 # HTTP(S) 代理服务器端口
+# socks-port: 7891 # SOCKS5 代理端口
+mixed-port: 10801 # HTTP(S) 和 SOCKS 代理混合端口
+# redir-port: 7892 # 透明代理端口，用于 Linux 和 MacOS
+
+# Linux 透明代理服务器端口（TProxy TCP 和 TProxy UDP）
+tproxy-port: 7893
+
+allow-lan: true # 允许局域网连接
+bind-address: "*" # 绑定 IP 地址，仅作用于 allow-lan 为 true，'*'表示所有地址
+
+#  find-process-mode has 3 values:always, strict, off
+#  - always, 开启，强制匹配所有进程
+#  - strict, 默认，由 clash 判断是否开启
+#  - off, 不匹配进程，推荐在路由器上使用此模式
+find-process-mode: strict
+
+# 规则匹配模型(rule/global/direct)
 mode: rule
-ipv6: true
+
+# GEO数据模式(更改geoip使用文件,mmdb或者dat,可选true / flase,true为dat,此项有默认值flase)
+geodata-mode: true
+# GEO文件加载模式(standard: 标准加载器, memconservative: 专为内存受限(小内存)设备优化的加载器(默认值))
+geodata-loader: standard
+# 自定义 geodata url
+geox-url:
+  geoip: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat
+  geosite: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat
+  mmdb: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb
+
+# 日志等级 silent/error/warning/info/debug
 log-level: info
-allow-lan: true
-port: 7890
-socks-port: 7891
-redir-port: 7892
-mixed-port: 7893
-tproxy-port: 9898
-unified-delay: false
-tcp-concurrent: true
+
+# 开启 IPv6 总开关，关闭阻断所有 IPv6 链接和屏蔽 DNS 请求 AAAA 记录
+ipv6: true
+
+# RESTful API 监听地址
 external-controller: 0.0.0.0:9090
+# API 的访问密钥
 secret: '123456'
-bind-address: "*"
-external-ui: "./ui"
+# TCP 并发连接所有 IP, 将使用最快握手的 TCP
+tcp-concurrent: true
+# 配置 WEB UI 目录，使用 http://{{external-controller}}/ui 访问
+external-ui: "/etc/Clash-Meta/ui"
+
+# 全局 TLS 指纹，优先低于 proxy 内的 client-fingerprint
+# 可选： "chrome","firefox","safari","ios","random","none" options.
+# Utls is currently support TLS transport in TCP/grpc/WS/HTTP for VLESS/Vmess and trojan.
+global-client-fingerprint: chrome
 
 # 为 Linux 下的出站连接提供默认流量标记
 routing-mark: 2233
 
-iptables:
-  enable: true # default is false
-  inbound-interface: eth0 # detect the inbound interface, default is 'lo'
-
-geodata-mode: true
-geox-url:
-  geoip: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
-  geosite: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
-  mmdb: "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
-
-find-process-mode: strict
-global-client-fingerprint: chrome
-
+# 缓存
 profile:
+  # 储存 API 对策略组的选择，以供下次启动时使用
   store-selected: true
+  # 储存 fakeip 映射表，域名再次发生连接时，使用原有映射地址
   store-fake-ip: true
 
+# 统一延迟, 更换延迟计算方式,去除握手等额外延迟
+unified-delay: false
+
+#【Meta专属】sniffer域名嗅探器
+# 开启此功能 会导致如果不使用Clash内置的DNS解析服务,就无法准确还原域名,进行域名分流的问题。
 sniffer:
-  enable: true
+  enable: false                          # 嗅探器开关  
   sniff:
-    TLS:
+    TLS:                                # TLS 默认如果不配置 ports 默认嗅探 443
       ports: [443, 8443]
-    HTTP:
+    HTTP:                               # 需要嗅探的端口, 默认嗅探 80
       ports: [80, 8080-8880]
-      override-destination: true
+      override-destination: true        # 是否使用嗅探结果作为实际访问,默认 true
 
 tun:
-  enable: true
-  stack: gvisor
-  dns-hijack:
-    - 'any:53'
-  auto-route: true
-  auto-detect-interface: true
+  enable: true                          # 是否启用 tun 模式来路由全局流量。
+  stack: system                         # tun 模式堆栈,如无使用问题,建议使用 system 栈;MacOS 用户推荐 gvisor栈
+  #dns-hijack:                           # dns 劫持,一般设置为 any:53 即可, 即劫持所有 53 端口的 udp 流量
+  #  - any:53
+  #  - tcp://any:53
+  auto-route: true                      # 自动设置全局路由,可以自动将全局流量路由进入 tun 网卡。
+  auto-detect-interface: true           # 自动选择流量出口接口,多出口网卡同时连接的设备建议手动指定出口网卡
 
+# 使用系统的dns, 也就是dhcp服务器下发的dns服务地址(使用我自建的dns服务来分流)
 dns:
-  enable: true
-  listen: :1053
-  ipv6: true
-  enhanced-mode: fake-ip
-  fake-ip-range: 28.0.0.1/8
+  enable: false                         # 关闭将使用系统 DNS
+  prefer-h3: true                       # 开启 DoH 支持 HTTP/3，将并发尝试
+  listen: 0.0.0.0:53                    # 开启 DNS 服务器监听
+  ipv6: true                            # false 将返回 AAAA 的空结果    
+  ipv6-timeout: 300                     # 单位：ms，内部双栈并发时，向上游查询 AAAA 时，等待 AAAA 的时间，默认 100ms
+  enhanced-mode: fake-ip                # or redir-host
+  fake-ip-range: 28.0.0.1/8             # fake-ip 池设置
   fake-ip-filter:
     - '*'
     - '+.lan'
     - '+.local'
   nameserver:
+    - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
-  proxy-server-nameserver:
-    - https://dns.nextdns.io/5a8546
-  nameserver-policy:
-    "geosite:cn,private":
-      - https://doh.pub/dns-query
-      - https://dns.alidns.com/dns-query
+  fallback:
+    - https://1.1.1.1/dns-query
+    - tcp://208.67.220.220:5353
 
 proxies:
   - name: "🇸🇬 [vless-reality-vision] 新家坡-me"
     type: vless
-    server: host
-    port: port
-    uuid: uuid
+    server: xxx
+    port: xxx
+    uuid: xxx
     network: tcp
     tls: true
     udp: true
@@ -98,6 +129,29 @@ proxies:
       short-id: 9ab288f7
     client-fingerprint: chrome
 
+# 游戏规则集下载地址: https://github.com/FQrabbit/SSTap-Rule/
+# 其它第三方规则:
+# 1. https://github.com/DivineEngine/Profiles/tree/master
+# 2. https://github.com/dler-io/Rules
+# 3. https://github.com/ACL4SSR/ACL4SSR/tree/master
+rule-providers:
+  # 守望先锋-亚服
+  overwatch:
+    type: http
+    behavior: ipcidr
+    path: ./providers/Overwatch-Asia.rules
+    #【Meta专属】URL可根据rule设定匹配对应的策略，方便更新provider
+    url: "https://fastly.jsdelivr.net/gh/FQrabbit/SSTap-Rule@master/rules/Overwatch-Asia.rules"
+    interval: 600
+  # 守望先锋-亚服
+  LAN:
+    type: http
+    behavior: classical
+    path: ./providers/LAN.yaml
+    #【Meta专属】URL可根据rule设定匹配对应的策略，方便更新provider
+    url: "https://fastly.jsdelivr.net/gh/dler-io/Rules@main/Clash/Provider/LAN.yaml"
+    interval: 600
+    
 proxy-groups:
   - name: "🚀 节点选择"
     type: select
@@ -135,29 +189,21 @@ proxy-groups:
       - "♻️ 自动选择"
       - "🇸🇬 [vless-reality-vision] 新家坡-me"
       - DIRECT
-rule-providers:
-  reject:
-    type: http
-    behavior: domain
-    url: "https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt"
-    path: ./ruleset/reject.yaml
-    interval: 86400
 rules:
   # 自己的规则放
+  - DST-PORT,7893,REJECT
+  - IP-CIDR,28.0.0.1/8,REJECT,no-resolve
+  - IP-CIDR,0.0.0.0/32,REJECT,no-resolve
   - DOMAIN-SUFFIX,fillpit.top,DIRECT
-  - DOMAIN-SUFFIX,pingan.com.cn,♻️ 自动选择
-  - DOMAIN,clash.razord.top,DIRECT
-  - DOMAIN,yacd.haishan.me,DIRECT
+  - DOMAIN-SUFFIX,fillpit.cn,DIRECT
 
   # 常用局域网 ip 段 直连
-  - GEOIP,LAN,DIRECT
+  - RULE-SET,LAN,DIRECT
 
   # ******** 自定义 规则区域 start ********
   # ****** 默认 非国内的域名和ip都走代理 ******
   # ****** 也就是说分流规则这里主要关注 需要直连的地址 和需要屏蔽的地址 (没匹配上的都走代理) ******
 
-  # 广告域名 屏蔽
-  - RULE-SET,reject,REJECT
   # 测速网站 直连
   - GEOSITE,speedtest,DIRECT
     # 私有网络专用域名
@@ -172,6 +218,8 @@ rules:
   - GEOSITE,telegram,♻️ 自动选择
   # 娱乐类
   - GEOSITE,category-entertainment,♻️ 自动选择
+  # 守望先锋-亚服
+  - RULE-SET,overwatch,♻️ 自动选择
 
   # ******** 自定义 规则区域 end ********
 
@@ -180,4 +228,7 @@ rules:
   # 国内 ip 直连
   - GEOIP,CN,DIRECT
   # 没匹配上的
-  - MATCH,🐟 漏网之鱼
+  - DST-PORT,80,🐟 漏网之鱼
+  - DST-PORT,443,🐟 漏网之鱼
+  - DST-PORT,22,🐟 漏网之鱼
+  - MATCH,DIRECT

@@ -1,0 +1,175 @@
+log:
+  level: debug
+  production: false
+  file: "/tmp/log/mosdns_info.log"
+
+plugins:
+  # 缓存
+  - tag: cache
+    type: cache
+    args:
+      size: 10240 # 内置内存缓存大小。单位: 条
+      lazy_cache_ttl: 86400 # 乐观缓存, 1天
+      # (实验性) 将缓存保存在磁盘。插件启动时也会自动从该文件载入缓存。
+      # 缓存将在 mosdns 被关闭时保存。
+      dump_file: ./cache.dump
+      # 自动保存间隔。单位秒。默认 600。
+      dump_interval: 600
+
+  # 转发至国内DNS，并发查询
+  - tag: forward_local
+    type: forward
+    args:
+      concurrent: 2
+      upstreams:
+        - tag: alidns_doh
+          addr: "https://dns.alidns.com/dns-query"
+          dial_addr: 223.5.5.5
+          idle_timeout: 30
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+        - tag: DNSPod_doh
+          addr: "https://doh.pub/dns-query"
+          dial_addr: 119.29.29.29
+          idle_timeout: 30
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+
+  # 转发至国外DNS，并发查询
+  - tag: forward_remote
+    type: forward
+    args:
+      concurrent: 2
+      upstreams:
+        - tag: cloudflare
+          addr: "https://1.1.1.1/dns-query"
+          idle_timeout: 30
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+        - tag: OpenDNS
+          addr: "tcp://208.67.220.220:5353"
+          idle_timeout: 30
+          enable_pipeline: false
+          enable_http3: false
+          max_conns: 2
+
+  # 自定义hosts
+  - tag: hosts
+    type: hosts
+    args:
+      files:
+        - "/etc/mosdns/hosts/kenfei_local.txt"
+
+  # 广告域名
+  # reject-list: https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/reject-list.txt
+  # anti-ad-domains: https://fastly.jsdelivr.net/gh/privacy-protection-tools/anti-AD@master/anti-ad-domains.txt
+  # GoodbyeAds: https://github.com/jerryn70/GoodbyeAds
+  - tag: "ads_domain"
+    type: "domain_set"
+    args:
+      exps:                         # 域名表达式。
+        - "01jud3v55z.com"
+      files:                        # 从文本文件载入
+        - "./domains/reject-list.txt"
+        - "./domains/anti-ad-domains.txt"
+        - "./domains/GoodbyAds.txt"
+
+  # 直连域名 
+  # direct-list: https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/direct-list.txt
+  - tag: "direct_domain"
+    type: "domain_set"
+    args:
+      files:                        # 从文本文件载入
+        - "./domains/direct-list.txt"
+
+  # 需要代理的域名
+  # proxy-list: https://raw.githubusercontent.com/Loyalsoldier/v2ray-rules-dat/release/proxy-list.txt
+  - tag: "proxy_domain"
+    type: "domain_set"
+    args:
+      files:                        # 从文本文件载入
+        - "./domains/proxy-list.txt"
+
+  # 成功响应的队列
+  - tag: has_resp_sequence
+    type: sequence
+    args:
+      - matches:
+          - has_resp
+        exec: accept
+
+  # fallback的primary服务器,返回非国内ip则drop_resp
+  - tag: local_sequence
+    type: sequence
+    args:
+      - exec: prefer_ipv4
+      - exec: $forward_local
+      - exec: jump has_resp_sequence
+
+  # fallback的secondary服务器,返回非国内ip则添加至ipset,返回国内ip只接受不会添加ipset
+  - tag: remote_sequence
+    type: sequence
+    args:
+      - exec: prefer_ipv4
+      - exec: $forward_remote
+      - exec: jump has_resp_sequence
+
+  # fallback sequence
+  - tag: fallback
+    type: fallback
+    args:
+      primary: forward_local
+      secondary: forward_remote
+      threshold: 500
+      always_standby: true
+
+  # 主运行序列
+  - tag: main_sequence
+    type: sequence
+    args:
+      - matches:
+          - qtype 65
+        exec: reject 3 # 屏蔽 QTYPE 65
+
+      - exec: $hosts      # 加载 hosts 文件
+      - exec: jump has_resp_sequence # 响应队列走一波,有返回值的话就不会继续往下执行了
+
+      # 屏蔽广告
+      - matches:
+          - qname $ads_domain
+        exec: reject 3    # 返回错误
+
+      # 下面的请求结果均进入缓存
+      - exec: $cache
+
+      # 直连 域名 处理
+      - matches:
+          - qname $direct_domain
+        exec: $forward_local
+      - exec: ttl 5-180
+      - exec: jump has_resp_sequence
+
+      # 需要代理的域名
+      - matches:
+          - qname $proxy_domain
+        exec: jump remote_sequence
+
+      # 漏网之鱼, 国内国外一起查, 优先使用国内的返回值
+      - exec: $fallback
+      - exec: jump has_resp_sequence
+
+  # 启动监听服务
+  - tag: udp_server
+    type: udp_server
+    args:
+      entry: main_sequence
+      listen: :53
+
+  - tag: tcp_server
+    type: tcp_server
+    args:
+      entry: main_sequence
+      listen: :53
