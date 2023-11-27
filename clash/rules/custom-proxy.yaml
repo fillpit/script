@@ -1,3 +1,5 @@
 payload:
   # 不明白播客
   - DOMAIN-SUFFIX,bumingbai.net
+  # v2ex
+  - DOMAIN-SUFFIX,v2ex.com
