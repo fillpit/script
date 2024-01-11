@@ -3,5 +3,20 @@ payload:
   - DOMAIN-SUFFIX,bumingbai.net
   # v2ex
   - DOMAIN-SUFFIX,v2ex.com
-  # v2ex
+  # OpenAI
   - DOMAIN-SUFFIX,akamai.net
+  - DOMAIN-SUFFIX,openai.com
+  - DOMAIN-SUFFIX,ios.chat.openai.com
+  - DOMAIN-SUFFIX,ai.com
+  - DOMAIN-SUFFIX,auth0.com
+  - DOMAIN-SUFFIX,challenges.cloudflare.com
+  - DOMAIN-SUFFIX,client-api.arkoselabs.com
+  - DOMAIN-SUFFIX,events.statsigapi.net
+  - DOMAIN-SUFFIX,featuregates.org
+  - DOMAIN-SUFFIX,identrust.com
+  - DOMAIN-SUFFIX,intercom.io
+  - DOMAIN-SUFFIX,intercomcdn.com
+  - DOMAIN-SUFFIX,poe.com
+  - DOMAIN-SUFFIX,sentry.io
+  - DOMAIN-SUFFIX,stripe.com
+  - DOMAIN-KEYWORD,openai
