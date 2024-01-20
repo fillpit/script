@@ -3,3 +3,4 @@ payload:
   - DOMAIN-SUFFIX,fillpit66.xyz
   - DOMAIN-SUFFIX,proxy.proxy302.com
   - DOMAIN-SUFFIX,okx.com
+  - IP-CIDR,192.227.192.244/32
