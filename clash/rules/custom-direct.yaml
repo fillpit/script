@@ -1,9 +1,7 @@
 payload:
   - DOMAIN-SUFFIX,fillpit.top
-  - DOMAIN-SUFFIX,fillpit66.xyz
-  - DOMAIN-SUFFIX,proxy.proxy302.com
+  - DOMAIN-SUFFIX,20240215.xyz
   - DOMAIN-SUFFIX,okx.com
-  - SRC-IP-CIDR,192.227.192.244/24
 
   # strava 骑行
   - DOMAIN-SUFFIX,strava.com
