@@ -20,3 +20,6 @@ payload:
   - DOMAIN-SUFFIX,sentry.io
   - DOMAIN-SUFFIX,stripe.com
   - DOMAIN-KEYWORD,openai
+
+  # blog
+  - DOMAIN-SUFFIX,tw93.fun
