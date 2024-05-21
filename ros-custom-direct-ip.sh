@@ -14,11 +14,14 @@ wget --no-check-certificate -c -O custom-direct-ip.txt https://raw.githubusercon
 {
 echo "/ip firewall address-list"
 
-for net in $(cat custom-direct-ip.txt) ; do
-  if [[ $net != *$ignore_row* ]]; then
-      echo "add list=CN address=$net comment=custom ip"
-  fi
-done
+# 读取 custom-direct-ip.txt 文件
+while read line; do
+    # 如果行不以 # 开头
+    if [[ "${line}" != "#"* ]]; then
+        # 输出该行
+        echo "add list=CN address=${line} comment=custom ip"
+    fi
+done < custom-direct-ip.txt
 
 } > ../RouterOS/custom-direct-ip.rsc
 
