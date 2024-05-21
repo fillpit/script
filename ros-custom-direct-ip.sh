@@ -15,7 +15,7 @@ wget --no-check-certificate -c -O custom-direct-ip.txt https://raw.githubusercon
 echo "/ip firewall address-list"
 
 for net in $(cat custom-direct-ip.txt) ; do
-  if [ $net != *$ignore_row* ]; then
+  if [[ $net != *$ignore_row* ]]; then
       echo "add list=CN address=$net comment=custom ip"
   fi
 done
