@@ -1,17 +1,19 @@
-#!/bin/sh
+#!/bin/bash
+
+# 需要忽略的行
+ignore_row = "#"
+
 mkdir -p ./pbr
 cd ./pbr
 
 # AS4809 BGP
 wget --no-check-certificate -c -O custom-direct-ip.txt https://raw.githubusercontent.com/fillpit/script/main/clash/rules/custom-direct-ip.txt
 
-ignore = "#"
-
 {
 echo "/ip firewall address-list"
 
 for net in $(cat custom-direct-ip.txt) ; do
-  if [ $net != *$ignore* ]; then
+  if [ $net != *$ignore_row* ]; then
       echo "add list=CN address=$net comment=custom ip"
   fi
 done
