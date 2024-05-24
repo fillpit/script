@@ -19,7 +19,7 @@ while read line; do
     # 如果行不以 # 开头
     if [[ "${line}" != "#"* ]]; then
         # 输出该行
-        echo "add list=CN address=${line} comment=proxy ip"
+        echo "add list=DO_PROXY_IP address=${line} comment=proxy ip"
     fi
 done < custom-proxy-ip.txt
 
