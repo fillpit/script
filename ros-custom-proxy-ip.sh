@@ -1,10 +1,5 @@
 #!/bin/bash
 
-# 需要忽略的行
-ignore_row = "#"
-# 防止空格被当成换行
-IFS=`echo -e "\n\r"`
-
 mkdir -p ./pbr
 cd ./pbr
 
