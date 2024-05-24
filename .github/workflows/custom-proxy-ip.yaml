@@ -1,4 +1,4 @@
-name: build custom direct ip
+name: converts custom proxy ip
 
 # Controls when the workflow will run
 on:
@@ -17,8 +17,8 @@ jobs:
 
     - name: download cidr
       run: |
-        chmod +x ros-custom-direct-ip.sh
-        ./ros-custom-direct-ip.sh
+        chmod +x ros-custom-proxy-ip.sh
+        ./ros-custom-proxy-ip.sh
         
     - name: Commit & Push changes
       uses: actions-js/push@master
