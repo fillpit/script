@@ -12,7 +12,7 @@ echo "/ip firewall address-list"
 # 读取 custom-proxy-ip.txt 文件
 while read line; do
     # 如果行不以 # 开头
-    if [[ "${line}" != "#"* ]]; then
+    if [[ ! -n "${line}" ]] && [[ "${line}" != "#"* ]]; then
         # 输出该行
         echo "add list=DO_PROXY_IP address=${line} comment=do_proxy_ip"
     fi
