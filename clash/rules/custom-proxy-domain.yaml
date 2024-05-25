@@ -24,3 +24,6 @@ payload:
   # blog
   - DOMAIN-SUFFIX,tw93.fun
   - DOMAIN-SUFFIX,fangzh.top
+
+  # chatGPT
+  - DOMAIN-SUFFIX,oaiusercontent.com
