@@ -46,3 +46,16 @@ add list=DO_PROXY_IP address=155.133.253.54/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=162.254.199.173/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=155.133.233.99/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=155.133.248.41/32 comment=do_proxy_ip
+add list=DO_PROXY_IP address= comment=do_proxy_ip
+add list=DO_PROXY_IP address=95.161.64.0/20 comment=do_proxy_ip
+add list=DO_PROXY_IP address=91.108.56.0/22 comment=do_proxy_ip
+add list=DO_PROXY_IP address=91.108.4.0/22 comment=do_proxy_ip
+add list=DO_PROXY_IP address=91.105.192.0/23 comment=do_proxy_ip
+add list=DO_PROXY_IP address=185.76.151.0/24 comment=do_proxy_ip
+add list=DO_PROXY_IP address=149.154.172.0/22 comment=do_proxy_ip
+add list=DO_PROXY_IP address=149.154.168.0/22 comment=do_proxy_ip
+add list=DO_PROXY_IP address=149.154.166.0/23 comment=do_proxy_ip
+add list=DO_PROXY_IP address=149.154.164.0/22 comment=do_proxy_ip
+add list=DO_PROXY_IP address=149.154.162.0/23 comment=do_proxy_ip
+add list=DO_PROXY_IP address=149.154.160.0/22 comment=do_proxy_ip
+add list=DO_PROXY_IP address=109.239.140.0/24 comment=do_proxy_ip
