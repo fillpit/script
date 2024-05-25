@@ -4,7 +4,6 @@ add list=DO_PROXY_IP address=103.10.124.116/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=65.109.152.16/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=103.10.124.119/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=65.109.152.15/32 comment=do_proxy_ip
-add list=DO_PROXY_IP address=103.10.124.116/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=65.109.153.54/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=65.109.21.117/32 comment=do_proxy_ip
 add list=DO_PROXY_IP address=162.254.193.100/32 comment=do_proxy_ip
