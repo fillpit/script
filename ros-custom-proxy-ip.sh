@@ -18,5 +18,7 @@ while read line; do
     fi
 done < custom-proxy-ip.txt
 
+} > ../RouterOS/custom-proxy-ip.rsc
+
 cd ..
 rm -rf ./pbr
