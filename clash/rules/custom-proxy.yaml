@@ -23,3 +23,6 @@ payload:
 
   # blog
   - DOMAIN-SUFFIX,tw93.fun
+  # docker
+  - DOMAIN-SUFFIX,docker.io
+  - DOMAIN-SUFFIX,docker.com
