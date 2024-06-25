@@ -55,3 +55,6 @@ add list=DO_PROXY_IP address=149.154.164.0/22 comment=do_proxy_ip
 add list=DO_PROXY_IP address=149.154.162.0/23 comment=do_proxy_ip
 add list=DO_PROXY_IP address=149.154.160.0/22 comment=do_proxy_ip
 add list=DO_PROXY_IP address=109.239.140.0/24 comment=do_proxy_ip
+add list=DO_PROXY_IP address=188.113.190.15/32 comment=do_proxy_ip
+add list=DO_PROXY_IP address=190.11.225.124/32 comment=do_proxy_ip
+add list=DO_PROXY_IP address=88.212.7.11/32 comment=do_proxy_ip
