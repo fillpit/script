@@ -1,5 +1,5 @@
 # --- APEX  ---- 
-#Apex,Apex英雄,0,0,1,0,1,0,By-Gambino
+# https://github.com/FQrabbit/SSTap-Rule/blob/master/rules/Apex.rules
 3.83.18.0/24
 3.84.10.0/24
 3.85.29.0/24
@@ -2044,6 +2044,7 @@
 # --- APEX  ---- 
 
 # --- Telegram ---
+# https://core.telegram.org/resources/cidr.txt
 91.108.56.0/22
 91.108.4.0/22
 91.108.8.0/22
