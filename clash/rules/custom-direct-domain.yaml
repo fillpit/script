@@ -17,4 +17,4 @@ payload:
   - DOMAIN-SUFFIX,tlu.dl.delivery.mp.microsoft.com
 
   # PS5 下载域名
-  - DOMAIN-SUFFIX,gst.prod.dl.playstation.net
+  - DOMAIN-SUFFIX,dl.playstation.net
