@@ -1,29 +1,29 @@
 payload:
-  # 不明白播客
-  - DOMAIN-SUFFIX,bumingbai.net
-  # v2ex
-  - DOMAIN-SUFFIX,v2ex.com
-  # OpenAI
-  - DOMAIN-SUFFIX,akamai.net
-  - DOMAIN-SUFFIX,openai.com
-  - DOMAIN-SUFFIX,ios.chat.openai.com
-  - DOMAIN-SUFFIX,ai.com
-  - DOMAIN-SUFFIX,auth0.com
-  - DOMAIN-SUFFIX,challenges.cloudflare.com
-  - DOMAIN-SUFFIX,client-api.arkoselabs.com
-  - DOMAIN-SUFFIX,events.statsigapi.net
-  - DOMAIN-SUFFIX,featuregates.org
-  - DOMAIN-SUFFIX,identrust.com
-  - DOMAIN-SUFFIX,intercom.io
-  - DOMAIN-SUFFIX,intercomcdn.com
-  - DOMAIN-SUFFIX,poe.com
-  - DOMAIN-SUFFIX,sentry.io
-  - DOMAIN-SUFFIX,stripe.com
-  - DOMAIN-KEYWORD,openai
+# 不明白播客
+- '+.bumingbai.net'
+# v2ex
+- '+.v2ex.com'
+# OpenAI
+- '+.akamai.net'
+- '+.openai.com'
+- '+.ios.chat.openai.com'
+- '+.ai.com'
+- '+.auth0.com'
+- '+.challenges.cloudflare.com'
+- '+.client-api.arkoselabs.com'
+- '+.events.statsigapi.net'
+- '+.featuregates.org'
+- '+.identrust.com'
+- '+.intercom.io'
+- '+.intercomcdn.com'
+- '+.poe.com'
+- '+.sentry.io'
+- '+.stripe.com'
+- '+.openai'
 
-  # blog
-  - DOMAIN-SUFFIX,tw93.fun
-  - DOMAIN-SUFFIX,fangzh.top
+# blog
+- '+.tw93.fun'
+- '+.fangzh.top'
 
-  # chatGPT
-  - DOMAIN-SUFFIX,oaiusercontent.com
+# chatGPT
+- '+.oaiusercontent.com'
