@@ -1,23 +1,23 @@
 payload:
-  - DOMAIN-SUFFIX,fillpit.top
-  - DOMAIN-SUFFIX,20240215.xyz
-  - DOMAIN-SUFFIX,okx.com
+- '+.fillpit.top'
+- '+.20240215.xyz'
+- '+.okx.com'
 
-  # strava 骑行
-  - DOMAIN-SUFFIX,strava.com
+# strava 骑行
+- '+.strava.com'
 
-  # xbox 下载地址
-  - DOMAIN-SUFFIX,xvcf1.xboxlive.com
-  - DOMAIN-SUFFIX,xvcf2.xboxlive.com
-  - DOMAIN-SUFFIX,assets1.xboxlive.com
-  - DOMAIN-SUFFIX,assets2.xboxlive.com
-  - DOMAIN-SUFFIX,assets1.xboxlive.cn
-  - DOMAIN-SUFFIX,assets2.xboxlive.cn
-  - DOMAIN-SUFFIX,dl.delivery.mp.microsoft.com
-  - DOMAIN-SUFFIX,tlu.dl.delivery.mp.microsoft.com
+# xbox 下载地址
+- '+.xvcf1.xboxlive.com'
+- '+.xvcf2.xboxlive.com'
+- '+.assets1.xboxlive.com'
+- '+.assets2.xboxlive.com'
+- '+.assets1.xboxlive.cn'
+- '+.assets2.xboxlive.cn'
+- '+.dl.delivery.mp.microsoft.com'
+- '+.tlu.dl.delivery.mp.microsoft.com'
 
-  # PS5 下载域名
-  - DOMAIN-SUFFIX,dl.playstation.net
+# PS5 下载域名
+- '+.dl.playstation.net'
 
-  # kimi AI
-  - DOMAIN-SUFFIX,kimi.com
+# kimi AI
+- '+.kimi.com'
