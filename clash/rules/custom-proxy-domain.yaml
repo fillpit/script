@@ -27,3 +27,6 @@ payload:
 
 # chatGPT
 - '+.oaiusercontent.com'
+
+# copilot
+- 'copilot.microsoft.com'
