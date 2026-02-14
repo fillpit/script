@@ -30,3 +30,4 @@ payload:
 
 # copilot
 - 'copilot.microsoft.com'
+- '+.static.microsoft'
