@@ -32,3 +32,6 @@ payload:
 - 'copilot.microsoft.com'
 - '+.static.microsoft'
 - '+.msecnd.net'
+
+# iconscout
+- '+.iconscout.com'
