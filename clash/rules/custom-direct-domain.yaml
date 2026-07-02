@@ -25,3 +25,6 @@ payload:
 
 # 京东
 - '+.gia.jd.com'
+
+# linuxdo
+- '+.linuxdo.org'
