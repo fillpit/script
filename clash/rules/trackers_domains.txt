@@ -128,7 +128,6 @@ tracker.lilithraws.org
 tracker.lintk.me
 tracker.linvk.com
 tracker.lyretain.site
-tracker.m-team.cc
 tracker.moeblog.cn
 tracker.moxing.party
 tracker.mywaifu.best
