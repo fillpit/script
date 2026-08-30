@@ -1,4 +1,4 @@
 payload:
 # ===== Epic Games =====
 - +.stryder.respawn.com
-- *.elb.*.amazonaws.com
+- +.elb.+.amazonaws.com
